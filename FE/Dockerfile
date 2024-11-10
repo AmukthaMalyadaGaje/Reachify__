@@ -11,7 +11,7 @@ COPY ./fe/package*.json ./
 RUN npm install
 
 # Step 5: Copy the entire frontend code
-COPY ./fe/ .
+COPY ./FE/ .
 
 # Step 6: Build the Vite project
 RUN npm run build
