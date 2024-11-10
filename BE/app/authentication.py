@@ -1,4 +1,4 @@
-# app/authentication.py
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from app.models import Token, UserCreate, UserLogin
 from app.crud import create_user, get_user_by_username

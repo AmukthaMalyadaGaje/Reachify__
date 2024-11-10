@@ -44,8 +44,8 @@ async def login(user: UserLogin, response: Response):
     response.set_cookie(
         key="access_token",
         value=access_token,
-        httponly=True,  # This ensures the cookie is not accessible via JavaScript
-        secure=True,    # Use secure=True when deploying over HTTPS
-        samesite="Lax",  # Adjust according to your needs
+        httponly=True,
+        secure=True,
+        samesite="Lax",
     )
     return {"access_token": access_token, "token_type": "bearer"}

@@ -1,4 +1,4 @@
-# app/database.py
+
 
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
@@ -13,10 +13,9 @@ db = client["Reachify"]
 
 def item_helper(item):
     return {
-        "id": str(item["_id"]),  # Convert ObjectId to string
-        "name": item.get("name"),  # Add other fields as needed
+        "id": str(item["_id"]),
+        "name": item.get("name"),
         "description": item.get("description"),
         "price": item.get("price"),
         "quantity": item.get("quantity"),
-        # Add other fields here based on your item structure
     }

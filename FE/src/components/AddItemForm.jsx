@@ -51,7 +51,6 @@ const AddItemForm = () => {
       setPrice("");
       setQuantity("");
 
-      // Clear the success message after a delay
       setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
       console.error(error);

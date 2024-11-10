@@ -1,4 +1,3 @@
-# app/auth.py
 
 from jose import JWTError, jwt
 from passlib.context import CryptContext
@@ -29,7 +28,7 @@ def create_access_token(data: dict):
 
 
 oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="token")  # OAuth2Bearer to expect a token
+    tokenUrl="token")
 
 
 async def get_current_user(token: str = Depends(oauth2_scheme)):

@@ -1,4 +1,3 @@
-// src/components/Signup.js
 import React, { useState } from "react";
 
 const Signup = () => {
@@ -10,7 +9,6 @@ const Signup = () => {
     e.preventDefault();
 
     const response = await fetch("http://localhost:8000/signup", {
-      // Update with actual signup endpoint
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +22,7 @@ const Signup = () => {
     const data = await response.json();
 
     if (response.ok) {
-      window.location.href = "/login"; // Redirect to login after successful signup
+      window.location.href = "/login";
     } else {
       setError(data.detail || "Signup failed");
     }

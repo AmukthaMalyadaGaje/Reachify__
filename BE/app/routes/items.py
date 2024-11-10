@@ -1,4 +1,3 @@
-# app/routes/items.py
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from app.database import db, item_helper
@@ -35,9 +34,9 @@ async def delete_item(item_id: str, current_user: str = Depends(get_current_user
 
 @items_router.post("/items", response_model=dict)
 async def add_item(item: ItemCreate, current_user: str = Depends(get_current_user)):
-    # Create an item document with the user association
+
     item_data = item.dict()
-    item_data["username"] = current_user  # Associate item with the username
+    item_data["username"] = current_user
 
     # Insert the item into the database
     result = await db["items"].insert_one(item_data)
