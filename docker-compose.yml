@@ -1,12 +1,28 @@
+version: "3.8"
+
 services:
   frontend:
     build:
-      context: ./fe
+      context: .
+      dockerfile: ./fe/Dockerfile
     ports:
       - "80:80"
+    networks:
+      - app-network
 
   backend:
     build:
-      context: ./be
+      context: .
+      dockerfile: ./be/Dockerfile
     ports:
       - "8000:8000"
+    networks:
+      - app-network
+    environment:
+      - DATABASE_URL=your_database_url # Adjust as needed
+    depends_on:
+      - frontend # Optional, if your backend depends on the frontend
+
+networks:
+  app-network:
+    driver: bridge

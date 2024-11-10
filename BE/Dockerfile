@@ -1,18 +1,20 @@
-# Use the official Python image
+# Step 1: Use Python image for backend
 FROM python:3.11-slim
 
-# Set working directory
+# Step 2: Set the working directory inside the container
 WORKDIR /app
 
-# Copy the requirements file and install dependencies
-COPY requirements.txt .
+# Step 3: Copy the requirements.txt file to the container
+COPY ./be/requirements.txt .
+
+# Step 4: Install dependencies from requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the backend code
-COPY . .
+# Step 5: Copy the entire backend code
+COPY ./be/ .
 
-# Expose the port that the backend will run on
+# Step 6: Expose the backend port (adjust as per your backend's port)
 EXPOSE 8000
 
-# Run the FastAPI app (for example)
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Step 7: Set the entry point (change if using a different framework like Flask/Django)
+CMD ["python", "main.py"]
