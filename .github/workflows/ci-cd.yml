@@ -3,51 +3,37 @@ name: CI/CD Pipeline
 on:
   push:
     branches:
-      - main # Trigger this workflow when pushing to the main branch
+      - main # Trigger the pipeline on pushes to the main branch
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
 
-    services:
-      docker:
-        image: docker:stable
-        options: --privileged
-        volumes:
-          - /var/run/docker.sock:/var/run/docker.sock
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2 # Checkout the code from the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2 # Set up Docker for multi-platform builds
+        uses: docker/setup-buildx-action@v2
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2 # Log into Docker Hub using secrets
+        uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }} # Docker Hub username (GitHub secret)
-          password: ${{ secrets.DOCKER_PASSWORD }} # Docker Hub password (GitHub secret)
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push frontend image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp-frontend:latest -f frontend/Dockerfile .
-          docker push ${{ secrets.DOCKER_USERNAME }}/myapp-frontend:latest  # Push the frontend image
+      - name: Build and Push Docker image for Frontend
+        uses: docker/build-push-action@v2
+        with:
+          context: ./frontend
+          file: ./frontend/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/frontend:latest
 
-      - name: Build and push backend image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp-backend:latest -f backend/Dockerfile .
-          docker push ${{ secrets.DOCKER_USERNAME }}/myapp-backend:latest  # Push the backend image
-
-      - name: Deploy to Server
-        env:
-          SSH_HOST: ${{ secrets.SSH_HOST }} # Server host IP or domain (GitHub secret)
-          SSH_USER: ${{ secrets.SSH_USER }} # SSH user (GitHub secret)
-          SSH_KEY: ${{ secrets.SSH_KEY }} # SSH private key (GitHub secret)
-        run: |
-          ssh -i "$SSH_KEY" -o StrictHostKeyChecking=no $SSH_USER@$SSH_HOST << 'EOF'
-            docker pull ${{ secrets.DOCKER_USERNAME }}/myapp-frontend:latest  # Pull latest frontend image
-            docker pull ${{ secrets.DOCKER_USERNAME }}/myapp-backend:latest  # Pull latest backend image
-            docker-compose down  # Stop existing containers
-            docker-compose up -d  # Start new containers
-          EOF
+      - name: Build and Push Docker image for Backend
+        uses: docker/build-push-action@v2
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/backend:latest
