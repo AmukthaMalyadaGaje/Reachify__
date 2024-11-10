@@ -31,4 +31,4 @@ jobs:
           context: ./FE
           file: ./FE/Dockerfile
           push: true
-          tags: your-username/frontend:latest
+          tags: amukthamalyadagaje/frontend:latest
